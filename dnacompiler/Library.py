@@ -9,7 +9,7 @@ class Library:
 
   def add(self, key, value):
     typeOf = type(value)
-    if typeOf == str or typeOf == FunctionType:
+    if typeOf == str or typeOf == FunctionType or isinstance(value, list):
       self._library[key] = value
     else:
       raise TypeError

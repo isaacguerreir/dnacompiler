@@ -5,7 +5,7 @@ class TestLibrary(unittest.TestCase):
   def test_add_raise_type_error(self):
     library = Library()
 
-    for value in [1, 1.0, [], {}]:
+    for value in [1, 1.0, {}]:
       with self.assertRaises(TypeError):
         library.add('key', value)
 

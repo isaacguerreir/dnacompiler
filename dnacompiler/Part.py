@@ -1,8 +1,8 @@
 class Part:
-    def __init__(self, name: str, sequence: str, sequenceType = None):
+    def __init__(self, name: str, value, partType = None):
       self.name = name
-      self.sequence = sequence
-      self.sequenceType = sequenceType
+      self.value = value
+      self.partType = partType
     
     def setPosition(self, pos: int):
       self.pos = pos

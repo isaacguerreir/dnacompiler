@@ -1,6 +1,8 @@
 import types
+from typing import List
 from dnacompiler.Constrain import Constrain
 from dnacompiler.Library import Library
+from dnacompiler.Part import Part
 
 class Compiler():
   _library: Library 
@@ -9,17 +11,18 @@ class Compiler():
     self._constrains = self._list_to_constrains(constrains)
     self._optimization_constrains = self._list_to_constrains(optimization_constrains)
 
-  def build(self):
-    sequence = ""
+  def build(self) -> List[Part]:
+    # TODO: Check if library exist and if library.keys > 0. If not raise an error
+    sequence = []
     for constrain in self._constrains:
       part_solved = self._solve(constrain)
       if type(part_solved) != str:
         raise TypeError
-      sequence += part_solved
+      sequence.append(Part(constrain.name, part_solved))
     return sequence
 
   def _solve(self, constrain):
-    value = self._library.get(constrain.name)
+    value = self._library.get_value(constrain.name)
     if type(value) == types.FunctionType:
       if constrain.args != None:
         return value(constrain.args)

@@ -10,5 +10,5 @@ class Library:
     else:
       raise TypeError
 
-  def get(self, key):
+  def get_value(self, key):
     return self._library[key]

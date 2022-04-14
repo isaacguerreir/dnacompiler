@@ -1,7 +1,7 @@
 import unittest
 from dnacompiler.Compiler import Compiler
 from dnacompiler.Library import Library
-from std.random import random_collection
+from dnacompiler.std.random import random_collection
 
 class TestCompiler(unittest.TestCase):
 

@@ -1,6 +1,6 @@
 import random
 from enum import Enum
-from utils.Alphabet import Alphabet
+from dnacompiler.utils.Alphabet import Alphabet
 
 def genRandomSeqWithConstraints(seqLength,
                                 alphabet,

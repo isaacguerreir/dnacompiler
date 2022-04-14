@@ -1,5 +1,5 @@
 import unittest
-from std.random import random_collection 
+from dnacompiler.std.random import random_collection 
 from dnacompiler.Library import Library
 from dnacompiler.Compiler import Compiler
 

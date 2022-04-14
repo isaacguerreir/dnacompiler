@@ -21,3 +21,4 @@ A library is map associating keys to collections, parts or functions that will b
 
 *add(key, value)*: associate a key with a allowed value (e.g collection, part and function) 
 *remove(key)*: remove a key
+*import_collection*: add a list of key-value pairs, could be passed as a list of dicts or a dict

@@ -22,7 +22,7 @@ class Compiler():
     return sequence
 
   def _solve(self, constrain):
-    value = self._library.get_value(constrain.name)
+    value = self._library.get(constrain.name)
     if type(value) == types.FunctionType:
       if constrain.args != None:
         return value(constrain.args)

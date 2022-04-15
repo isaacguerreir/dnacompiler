@@ -1,7 +1,7 @@
 import unittest
 from dnacompiler.Compiler import Compiler
 from dnacompiler.Library import Library
-from dnacompiler.std.random import random_collection
+from dnacompiler.std.random import random_collection, RANDOM_GENERATOR
 
 class TestCompiler(unittest.TestCase):
 
@@ -64,7 +64,7 @@ class TestCompiler(unittest.TestCase):
         'constrain': 'PRIMERS'
       },
       {
-        'constrain': 'RANDOM_GENERATOR',
+        'constrain': RANDOM_GENERATOR,
         'args': {
           'length': '12',
           'alphabet': 'DNA'

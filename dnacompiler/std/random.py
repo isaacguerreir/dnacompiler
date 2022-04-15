@@ -2,6 +2,8 @@ import random
 from enum import Enum
 from dnacompiler.utils.Alphabet import Alphabet
 
+RANDOM_GENERATOR = 'RANDOM_GENERATOR'
+
 def genRandomSeqWithConstraints(seqLength,
                                 alphabet,
                                 forbiddenSeqs,
@@ -129,5 +131,6 @@ def random_sequence_generator(args):
   return genRandomSeqWithConstraints(length, alphabet, forbidden)
 
 random_collection = {
-  'RANDOM_GENERATOR': random_sequence_generator 
+  RANDOM_GENERATOR: random_sequence_generator 
 }
+

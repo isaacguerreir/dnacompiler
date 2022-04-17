@@ -22,7 +22,7 @@ class Compiler():
       if isinstance(part_solved, list):
         sequence.append(Part(constrain.name, part_solved, 'combinatorial'))
       else:
-        sequence.append(Part(constrain.name, part_solved))
+        sequence.append(Part(constrain.name, part_solved.upper()))
 
     sequences = []
     for parts in self._optimize(sequence):

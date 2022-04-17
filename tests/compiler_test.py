@@ -2,6 +2,9 @@ import unittest
 from dnacompiler.Compiler import Compiler
 from dnacompiler.Library import Library
 from dnacompiler.std.random import random_collection, RANDOM_GENERATOR
+from dnacompiler.std.promoters import anderson_promoters, J23100
+from dnacompiler.std.rbss import rbs_collection, B0034 
+from dnacompiler.std.terminators import terminator_collection, B0015
 from dnacompiler.utils.Conversion import sequences2gb
 
 class TestCompiler(unittest.TestCase):
@@ -90,7 +93,105 @@ class TestCompiler(unittest.TestCase):
     sequences = compiler.build()
     sequences2gb(sequences)
 
+
+  def test_whole_sequence(self):
+    target_proteins = {
+      'TARGET_PROTEINS': [
+        {
+          'name': 'RFP',
+          'value': 'atggcttcctccgaagacgttatcaaagagttcatgcgtttcaaagttcgtatggaaggttccgttaacggtcacgagttcgaaatcgaaggtgaaggtgaaggtcgtccgtacgaaggtacccagaccgctaaactgaaagttaccaaaggtggtccgctgccgttcgcttgggacatcctgtccccgcagttccagtacggttccaaagcttacgttaaacacccggctgacatcccggactacctgaaactgtccttcccggaaggtttcaaatgggaacgtgttatgaacttcgaagacggtggtgttgttaccgttacccaggactcctccctgcaagacggtgagttcatctacaaagttaaactgcgtggtaccaacttcccgtccgacggtccggttatgcagaaaaaaaccatgggttgggaagcttccaccgaacgtatgtacccggaagacggtgctctgaaaggtgaaatcaaaatgcgtctgaaactgaaagacggtggtcactacgacgctgaagttaaaaccacctacatggctaaaaaaccggttcagctgccgggtgcttacaaaaccgacatcaaactggacatcacctcccacaacgaagactacaccatcgttgaacagtacgaacgtgctgaaggtcgtcactccaccggtgcttaataacgctgatagtgctagtgtagatcgc'
+        },
+        {
+          'name': 'GFP',
+          'value': 'atgcgtaaaggagaagaacttttcactggagttgtcccaattcttgttgaattagatggtgatgttaatgggcacaaattttctgtcagtggagagggtgaaggtgatgcaacatacggaaaacttacccttaaatttatttgcactactggaaaactacctgttccatggccaacacttgtcactactttcggttatggtgttcaatgctttgcgagatacccagatcatatgaaacagcatgactttttcaagagtgccatgcccgaaggttatgtacaggaaagaactatatttttcaaagatgacgggaactacaagacacgtgctgaagtcaagtttgaaggtgatacccttgttaatagaatcgagttaaaaggtattgattttaaagaagatggaaacattcttggacacaaattggaatacaactataactcacacaatgtatacatcatggcagacaaacaaaagaatggaatcaaagttaacttcaaaattagacacaacattgaagatggaagcgttcaactagcagaccattatcaacaaaatactccaattggcgatggccctgtccttttaccagacaaccattacctgtccacacaatctgccctttcgaaagatcccaacgaaaagagagaccacatggtccttcttgagtttgtaacagctgctgggattacacatggcatggatgaactatacaaataataa'
+        },
+      ]
+    }
+
+    library = Library([random_collection, anderson_promoters, rbs_collection, terminator_collection, target_proteins])
+
+    requirements = [
+      {
+        'constrain': RANDOM_GENERATOR,
+        'args': {
+          'length': '12',
+          'alphabet': 'DNA'
+         }
+      },
+      {
+        'constrain': J23100
+      },
+      {
+        'constrain': B0034
+      },
+      {
+        'constrain': 'TARGET_PROTEINS'
+      },
+      {
+        'constrain': B0015
+      },
+      {
+        'constrain': RANDOM_GENERATOR,
+        'args': {
+          'length': '12',
+          'alphabet': 'DNA'
+         }
+      },
+    ]
 	
+    compiler = Compiler(requirements)
+    compiler.setLibrary(library)
+    sequences = compiler.build()
+
+    for sequence in sequences:
+      for part in sequence.features:
+        print(part.name, part.value)
+
+  def test_whole_sequence_combinatorial(self):
+    my_proteins = {
+        'RFP': 'atggcttcctccgaagacgttatcaaagagttcatgcgtttcaaagttcgtatggaaggttccgttaacggtcacgagttcgaaatcgaaggtgaaggtgaaggtcgtccgtacgaaggtacccagaccgctaaactgaaagttaccaaaggtggtccgctgccgttcgcttgggacatcctgtccccgcagttccagtacggttccaaagcttacgttaaacacccggctgacatcccggactacctgaaactgtccttcccggaaggtttcaaatgggaacgtgttatgaacttcgaagacggtggtgttgttaccgttacccaggactcctccctgcaagacggtgagttcatctacaaagttaaactgcgtggtaccaacttcccgtccgacggtccggttatgcagaaaaaaaccatgggttgggaagcttccaccgaacgtatgtacccggaagacggtgctctgaaaggtgaaatcaaaatgcgtctgaaactgaaagacggtggtcactacgacgctgaagttaaaaccacctacatggctaaaaaaccggttcagctgccgggtgcttacaaaaccgacatcaaactggacatcacctcccacaacgaagactacaccatcgttgaacagtacgaacgtgctgaaggtcgtcactccaccggtgcttaataacgctgatagtgctagtgtagatcgc',
+        'GFP': 'atgcgtaaaggagaagaacttttcactggagttgtcccaattcttgttgaattagatggtgatgttaatgggcacaaattttctgtcagtggagagggtgaaggtgatgcaacatacggaaaacttacccttaaatttatttgcactactggaaaactacctgttccatggccaacacttgtcactactttcggttatggtgttcaatgctttgcgagatacccagatcatatgaaacagcatgactttttcaagagtgccatgcccgaaggttatgtacaggaaagaactatatttttcaaagatgacgggaactacaagacacgtgctgaagtcaagtttgaaggtgatacccttgttaatagaatcgagttaaaaggtattgattttaaagaagatggaaacattcttggacacaaattggaatacaactataactcacacaatgtatacatcatggcagacaaacaaaagaatggaatcaaagttaacttcaaaattagacacaacattgaagatggaagcgttcaactagcagaccattatcaacaaaatactccaattggcgatggccctgtccttttaccagacaaccattacctgtccacacaatctgccctttcgaaagatcccaacgaaaagagagaccacatggtccttcttgagtttgtaacagctgctgggattacacatggcatggatgaactatacaaataataa'
+    }
+
+    library = Library([random_collection, anderson_promoters, rbs_collection, terminator_collection, my_proteins])
+
+    requirements = [
+      {
+        'constrain': RANDOM_GENERATOR,
+        'args': {
+          'length': '12',
+          'alphabet': 'DNA'
+         }
+      },
+      {
+        'constrain': J23100
+      },
+      {
+        'constrain': B0034
+      },
+      {
+        'constrain': 'RFP'
+      },
+      {
+        'constrain': B0015
+      },
+      {
+        'constrain': RANDOM_GENERATOR,
+        'args': {
+          'length': '12',
+          'alphabet': 'DNA'
+         }
+      },
+    ]
+	
+    compiler = Compiler(requirements)
+    compiler.setLibrary(library)
+    sequences = compiler.build()
+
+    for sequence in sequences:
+      for part in sequence.features:
+        print(part.name, part.value)
+
     
 
 if __name__ == "__main__":

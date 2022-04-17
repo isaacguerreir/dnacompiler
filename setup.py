@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.5' 
+VERSION = '0.0.6' 
 DESCRIPTION = 'DNA Compiler uses constrain programming to facilitate genetic design.'
 LONG_DESCRIPTION = 'Gather your library, define your genetic design constrains and requirements and DNA Compiler will create the sequence for you.'
 

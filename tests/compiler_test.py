@@ -2,6 +2,7 @@ import unittest
 from dnacompiler.Compiler import Compiler
 from dnacompiler.Library import Library
 from dnacompiler.std.random import random_collection, RANDOM_GENERATOR
+from dnacompiler.utils.Conversion import sequences2gb
 
 class TestCompiler(unittest.TestCase):
 
@@ -12,8 +13,8 @@ class TestCompiler(unittest.TestCase):
     compiler.setLibrary(library)
     sequences = compiler.build()
     self.assertEqual(len(sequences), 1)
-    self.assertEqual(len(sequences[0]), 1)
-    self.assertEqual(sequences[0][0].value, 'ATCG')
+    self.assertEqual(len(sequences[0].features), 1)
+    self.assertEqual(sequences[0].sequence, 'ATCG')
 
   def test_build_func_constrain(self):
     def x():
@@ -24,8 +25,8 @@ class TestCompiler(unittest.TestCase):
     compiler.setLibrary(library)
     sequences = compiler.build()
     self.assertEqual(len(sequences), 1)
-    self.assertEqual(len(sequences[0]), 1)
-    self.assertEqual(sequences[0][0].value, 'CGTA')
+    self.assertEqual(len(sequences[0].features), 1)
+    self.assertEqual(sequences[0].sequence, 'CGTA')
 
   def test_build_func_constrain_with_args(self):
     def x(args: str):
@@ -38,8 +39,8 @@ class TestCompiler(unittest.TestCase):
     compiler.setLibrary(library)
     sequences = compiler.build()
     self.assertEqual(len(sequences), 1)
-    self.assertEqual(len(sequences[0]), 1)
-    self.assertEqual(sequences[0][0].value, 'CCGA')
+    self.assertEqual(len(sequences[0].features), 1)
+    self.assertEqual(sequences[0].sequence, 'CCGA')
 
   def test_combinatorial_constrains(self):
     primers_collection = {
@@ -76,9 +77,21 @@ class TestCompiler(unittest.TestCase):
     sequences = compiler.build()
     self.assertEqual(len(sequences), 3)
     for sequence in sequences:
-      self.assertEqual(len(sequence), 2)
-      self.assertEqual(len(sequence[0].value), 4)
-      self.assertEqual(len(sequence[1].value), 12)
+      self.assertEqual(len(sequence.features), 2)
+      self.assertEqual(len(sequence.features[0].value), 4)
+      self.assertEqual(len(sequence.features[1].value), 12)
+
+  
+  def test_to_genbank(self):
+    library = Library()
+    library.add('Random Sequence', 'ATCG')
+    compiler = Compiler([{ 'constrain': 'Random Sequence'}], [])
+    compiler.setLibrary(library)
+    sequences = compiler.build()
+    sequences2gb(sequences)
+
+	
+    
 
 if __name__ == "__main__":
   unittest.main()

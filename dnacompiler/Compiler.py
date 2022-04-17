@@ -3,6 +3,7 @@ from typing import List
 from dnacompiler.Constrain import Constrain
 from dnacompiler.Library import Library
 from dnacompiler.Part import Part
+from dnacompiler.Sequence import Sequence
 
 class Compiler():
   _library: Library 
@@ -11,7 +12,7 @@ class Compiler():
     self._constrains = self._list_to_constrains(constrains)
     self._optimization_constrains = self._list_to_constrains(optimization_constrains)
 
-  def build(self) -> List[List[Part]]:
+  def build(self) -> List[Sequence]:
     # TODO: Check if library exist and if library.keys > 0. If not raise an error
     sequence = []
     for constrain in self._constrains:
@@ -22,9 +23,14 @@ class Compiler():
         sequence.append(Part(constrain.name, part_solved, 'combinatorial'))
       else:
         sequence.append(Part(constrain.name, part_solved))
-    return self._optimize(sequence)
 
-  def _optimize(self, parts: List[Part]):
+    sequences = []
+    for parts in self._optimize(sequence):
+      sequences.append(Sequence(parts))
+
+    return sequences
+
+  def _optimize(self, parts: List[Part]) -> List[List[Part]]:
     sequences = []
     for part in parts:
       sequences = self._comb_solve(part, sequences)

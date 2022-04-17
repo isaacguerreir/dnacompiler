@@ -18,8 +18,8 @@ class TestRandom(unittest.TestCase):
     compiler.setLibrary(library)
     sequences = compiler.build()
     self.assertEqual(len(sequences), 1)
-    self.assertEqual(len(sequences[0]), 1)
-    self.assertEqual(len(sequences[0][0].value), 12)
+    self.assertEqual(len(sequences[0].features), 1)
+    self.assertEqual(len(sequences[0].sequence), 12)
 
 if __name__ == "__main__":
   unittest.main()
